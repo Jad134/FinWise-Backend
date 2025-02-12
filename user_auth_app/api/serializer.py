@@ -22,7 +22,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     def validate(self, data):
         """ Überprüft, ob die Passwörter übereinstimmen """
         if data['password'] != data['confirm_password']:
-            raise serializers.ValidationError({"password": "Passwörter stimmen nicht überein."})
+            raise serializers.ValidationError({"wrong_confirm_password": "Passwörter stimmen nicht überein."})
         return data
 
     def create(self, validated_data):
