@@ -27,8 +27,8 @@ class Expense(models.Model):
 class FinancialOverview(models.Model):
     """ Speichert das aktuelle Finanzziel des Benutzers und die Gesamtbilanz """
     user = models.OneToOneField(User, related_name='financial_overview', on_delete=models.CASCADE)
-    target_savings = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Sparziel
-    total_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Gesamtbilanz
+    target_savings = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  
+    total_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  
 
     def calculate_total_income(self):
         """ Berechnet das gesamte Einkommen des Nutzers """
