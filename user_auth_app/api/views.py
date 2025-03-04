@@ -6,6 +6,7 @@ from rest_framework import status
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from accounts.models import CustomUser
+from rest_framework.permissions import AllowAny
 
 
 class RegisterView(APIView):
@@ -28,6 +29,8 @@ class RegisterView(APIView):
     
 
 class CustomAuthToken(APIView):
+    authentication_classes = []  # Deaktiviert die Authentifizierung für diesen Endpunkt
+    permission_classes = [AllowAny]
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
