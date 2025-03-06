@@ -21,7 +21,7 @@ class Expense(models.Model):
     date = models.DateField(default=timezone.now)
 
     def __str__(self):
-        return f"Expense of {self.amount} for {self.category}"
+        return f"Expense of {self.amount} for {self.category} from {self.user}"
 
 
 class FinancialOverview(models.Model):
