@@ -1,3 +1,5 @@
+from datetime import timedelta
+from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -20,7 +22,16 @@ class ExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = ExpenseSerializer
 
     def get_queryset(self):
-        return Expense.objects.filter(user=self.request.user)
+        user = self.request.user
+        queryset = Expense.objects.filter(user=user)
+
+        # Kategorie-Filter abrufen
+        category_filter = self.request.query_params.get('filter', None)
+
+        if category_filter:
+            queryset = queryset.filter(category=category_filter)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
