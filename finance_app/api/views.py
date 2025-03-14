@@ -17,24 +17,49 @@ class IncomeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+        period = self.request.query_params.get('period', None)
+        if period:
+            today = timezone.now().date()
+            if period == "daily":
+                queryset = queryset.filter(date=today)
+            elif period == "weekly":
+                queryset = queryset.filter(date__gte=today - timedelta(days=7))
+            elif period == "monthly":
+                queryset = queryset.filter(date__month=today.month, date__year=today.year)
+            elif period == "yearly":
+                queryset = queryset.filter(date__year=today.year)
+
+        return queryset
+
 # ✅ Expense ViewSet
 class ExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = ExpenseSerializer
 
     def get_queryset(self):
         user = self.request.user
-        queryset = Expense.objects.filter(user=user)
+        queryset = Expense.objects.filter(user=user) 
 
-        # Kategorie-Filter abrufen
         category_filter = self.request.query_params.get('filter', None)
-
         if category_filter:
             queryset = queryset.filter(category=category_filter)
 
-        return queryset
+        period = self.request.query_params.get('period', None)
+        if period:
+            today = timezone.now().date()
+            if period == "daily":
+                queryset = queryset.filter(date=today)
+            elif period == "weekly":
+                queryset = queryset.filter(date__gte=today - timedelta(days=7))
+            elif period == "monthly":
+                queryset = queryset.filter(date__month=today.month, date__year=today.year)
+            elif period == "yearly":
+                queryset = queryset.filter(date__year=today.year)
+
+        return queryset  
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user)  
+
 
 # ✅ Financial Overview ViewSet (Nur Read-Only)
 class FinancialOverviewViewSet(viewsets.ViewSet):
