@@ -7,6 +7,7 @@ from finance_app.models import Income, Expense, FinancialOverview
 from .serializers import IncomeSerializer, ExpenseSerializer, FinancialOverviewSerializer
 from rest_framework.permissions import IsAuthenticated
 from .filters import apply_period_filter
+from django.db.models import Sum
 
 # ✅ Income ViewSet
 class IncomeViewSet(viewsets.ModelViewSet):
@@ -52,3 +53,15 @@ class FinancialOverviewViewSet(viewsets.ViewSet):
         overview, created = FinancialOverview.objects.get_or_create(user=request.user)
         serializer = FinancialOverviewSerializer(overview)
         return Response(serializer.data)
+
+
+class TopCategoriesView(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        top_categories = Expense.objects.filter(user=request.user) \
+            .values('category') \
+            .annotate(total_amount=Sum('amount')) \
+            .order_by('-total_amount')[:2]  
+        
+        return Response(top_categories)
