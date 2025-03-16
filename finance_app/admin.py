@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Expense, Income
+from .models import Expense, FinancialOverview, Income
 from django.utils.html import format_html
 from django.contrib.auth.models import User
 
@@ -29,3 +29,17 @@ class IncomeAdmin(admin.ModelAdmin):
         return super().changelist_view(request, extra_context=extra_context)
 
 admin.site.register(Income, IncomeAdmin) 
+
+class OverviewAdmin(admin.ModelAdmin):
+    list_display = ('user', 'target_savings', 'total_balance')  
+    list_filter = ('user',)
+    search_fields = ('user__username',)
+
+    def changelist_view(self, request, extra_context=None):
+        """Zeigt alle Benutzer und ihre Finanzübersicht an."""
+        extra_context = extra_context or {}
+        extra_context['title'] = 'Alle Finanzübersichten nach Benutzer'
+        return super().changelist_view(request, extra_context=extra_context)
+
+admin.site.register(FinancialOverview, OverviewAdmin)
+
