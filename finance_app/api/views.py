@@ -10,6 +10,7 @@ from .filters import apply_period_filter
 from django.db.models import Sum
 from django.utils.timezone import now
 
+
 # ✅ Income ViewSet
 class IncomeViewSet(viewsets.ModelViewSet):
     serializer_class = IncomeSerializer
