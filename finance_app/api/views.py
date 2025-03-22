@@ -3,6 +3,7 @@ from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from finance_app.api.pagination import ExpensePagination
 from finance_app.models import Income, Expense, FinancialOverview
 from .serializers import IncomeSerializer, ExpenseSerializer, FinancialOverviewSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -45,6 +46,15 @@ class ExpenseViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)  
+
+
+class LazyLoadExpenseViewSet(viewsets.ModelViewSet):
+    serializer_class = ExpenseSerializer
+    pagination_class = ExpensePagination  
+
+    def get_queryset(self):
+        return Expense.objects.filter(user=self.request.user).order_by('-date')
+
 
 
 # ✅ Financial Overview ViewSet (Nur Read-Only)
