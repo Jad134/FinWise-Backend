@@ -1,3 +1,4 @@
+from rest_framework.exceptions import ValidationError
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import QuerySet
@@ -15,4 +16,4 @@ def apply_period_filter(queryset: QuerySet, period: str) -> QuerySet:
     elif period == "yearly":
         return queryset.filter(date__year=today.year)
     
-    return queryset
+    raise ValidationError({"period": "Invalid period value. Must be one of: daily, weekly, monthly, yearly."})

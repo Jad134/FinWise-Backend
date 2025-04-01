@@ -1,4 +1,5 @@
 from datetime import date
+from django.forms import ValidationError
 from rest_framework.authtoken.models import Token
 from django.test import TestCase
 from django.urls import reverse
@@ -45,6 +46,20 @@ class IncomeViewTest(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["source"], "rent")
+
+    def test_income_period_filter(self):
+        url = reverse('income-list')
+        response = self.client.get(url, {"period": "monthly"})
+        self.assertEqual(response.status_code, 200)
+
+    def test_invalid_period_filter(self):
+        url = reverse('income-list') 
+        response = self.client.get(url, {"period": "invalid_period"})  
+    
+        expected_message = {'period': 'Invalid period value. Must be one of: daily, weekly, monthly, yearly.'}
+        self.assertEqual(response.data, expected_message)
+        self.assertEqual(response.status_code, 400)
+
 
 
 
