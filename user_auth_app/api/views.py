@@ -14,8 +14,8 @@ class RegisterView(APIView):
         serializer = RegistrationSerializer(data=request.data)
 
         if serializer.is_valid():
-            user = serializer.save()  # Benutzer speichern
-            token, created = Token.objects.get_or_create(user=user)  # Token erstellen oder abrufen
+            user = serializer.save() 
+            token, created = Token.objects.get_or_create(user=user)  
             
             return Response(
                 {
@@ -29,7 +29,7 @@ class RegisterView(APIView):
     
 
 class CustomAuthToken(APIView):
-    authentication_classes = []  # Deaktiviert die Authentifizierung für diesen Endpunkt
+    authentication_classes = []  
     permission_classes = [AllowAny]
     def post(self, request):
         username = request.data.get("username")

@@ -12,7 +12,7 @@ from django.db.models import Sum
 from django.utils.timezone import now
 
 
-# ✅ Income ViewSet
+
 class IncomeViewSet(viewsets.ModelViewSet):
     serializer_class = IncomeSerializer
 
@@ -27,7 +27,6 @@ class IncomeViewSet(viewsets.ModelViewSet):
         serializer.save(user=self.request.user)
 
 
-# ✅ Expense ViewSet
 class ExpenseViewSet(viewsets.ModelViewSet):
     serializer_class = ExpenseSerializer
 
@@ -57,7 +56,7 @@ class LazyLoadExpenseViewSet(viewsets.ModelViewSet):
 
 
 
-# ✅ Financial Overview ViewSet (Nur Read-Only)
+
 class FinancialOverviewViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 

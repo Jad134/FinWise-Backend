@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from finance_app.models import Income
+import logging
 
 User = get_user_model()
 
@@ -39,6 +40,7 @@ class IncomeViewTest(APITestCase):
     def test_get_income(self):
         url = reverse('income-list')
         response = self.client.get(url)
+        print(response.content)
         self.assertEqual(response.status_code, 200)
 
     def test_get_detail_income(self):
