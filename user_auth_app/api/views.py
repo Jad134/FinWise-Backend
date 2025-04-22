@@ -53,7 +53,7 @@ class CustomAuthToken(APIView):
         return Response({"token": token.key}, status=status.HTTP_200_OK)
     
     def check_credentials(self, username, password):
-        """Überprüft, ob Benutzername und Passwort vorhanden sind."""
+        """Checks if username and password exist."""
         if not username or not password:
             return Response(
                 {"error": "Benutzername und Passwort erforderlich"},
@@ -62,10 +62,4 @@ class CustomAuthToken(APIView):
         return None    
 
     def check_user_password(self, username, password):
-        """Überprüft Benutzerexistenz und Passwort und gibt den Benutzer zurück."""
-        user = authenticate(username=username, password=password)
-        if user is None:
-            
-            if not CustomUser.objects.filter(username=username).exists():
-                return None 
-        return user
+        return authenticate(username=username, password=password)

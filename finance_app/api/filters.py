@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.db.models import QuerySet
 
 def apply_period_filter(queryset: QuerySet, period: str) -> QuerySet:
-    """Wendet einen Zeitraum-Filter (daily, weekly, monthly, yearly) auf ein QuerySet an."""
+    """Applies a time period filter (daily, weekly, monthly, yearly) to a QuerySet."""
     today = timezone.now().date()
 
     if period == "daily":

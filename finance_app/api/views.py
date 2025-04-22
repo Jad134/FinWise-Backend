@@ -65,24 +65,6 @@ class FinancialOverviewViewSet(viewsets.ViewSet):
         serializer = FinancialOverviewSerializer(overview)
         return Response(serializer.data)
 
-
-# class TopCategoriesView(viewsets.ViewSet):
-#     permission_classes = [IsAuthenticated]
-#     serializer_class = ExpenseSerializer
-
-
-#     def list(self, request):
-
-#          today = now()
-#          top_categories = Expense.objects.filter(
-#              user=request.user,
-#              date__month=today.month,  
-#              date__year=today.year      
-#          ).values('category') \
-#          .annotate(total_amount=Sum('amount')) \
-#          .order_by('-total_amount')[:2]  
-
-#          return Response(top_categories)
     
 class TopCategoriesView(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
