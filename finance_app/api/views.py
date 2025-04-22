@@ -66,17 +66,57 @@ class FinancialOverviewViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
+# class TopCategoriesView(viewsets.ViewSet):
+#     permission_classes = [IsAuthenticated]
+#     serializer_class = ExpenseSerializer
+
+
+#     def list(self, request):
+
+#          today = now()
+#          top_categories = Expense.objects.filter(
+#              user=request.user,
+#              date__month=today.month,  
+#              date__year=today.year      
+#          ).values('category') \
+#          .annotate(total_amount=Sum('amount')) \
+#          .order_by('-total_amount')[:2]  
+
+#          return Response(top_categories)
+    
 class TopCategoriesView(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = ExpenseSerializer
 
-    def list(self, request):
-        today = now()
-        top_categories = Expense.objects.filter(
-            user=request.user,
-            date__month=today.month,  
-            date__year=today.year      
-        ).values('category') \
-        .annotate(total_amount=Sum('amount')) \
-        .order_by('-total_amount')[:2]  
 
-        return Response(top_categories)
+
+    def list(self, request): 
+         top_categories = FilterTopCategories.get_top_categories_for_user(request.user)
+         return Response(top_categories)
+
+
+class FilterTopCategories():
+     
+     @staticmethod
+     def get_top_categories_for_user(user):
+         today = now()
+         try:
+             top_categories = Expense.objects.filter(
+                 user=user,
+                 date__month=today.month,  
+                 date__year=today.year      
+             ).values('category') \
+             .annotate(total_amount=Sum('amount')) \
+             .order_by('-total_amount')[:2]
+             return top_categories
+         except Expense.DoesNotExist:
+             return[]
+         except Exception as e:
+             print('Fehler beim Aufrufen der Top-Categorien', e)
+             return[]
+             
+     
+     
+
+    
+    
