@@ -1,8 +1,5 @@
-from datetime import timedelta
-from django.utils import timezone
 from rest_framework import viewsets
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
 from finance_app.api.pagination import ExpensePagination
 from finance_app.models import Income, Expense, FinancialOverview
 from .serializers import IncomeSerializer, ExpenseSerializer, FinancialOverviewSerializer
@@ -69,8 +66,6 @@ class FinancialOverviewViewSet(viewsets.ViewSet):
 class TopCategoriesView(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ExpenseSerializer
-
-
 
     def list(self, request): 
          top_categories = FilterTopCategories.get_top_categories_for_user(request.user)

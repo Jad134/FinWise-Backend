@@ -10,7 +10,7 @@ class ExpenseAdmin(admin.ModelAdmin):
 
 
     def changelist_view(self, request, extra_context=None):
-        """Zeigt alle Benutzer und ihre Ausgaben an."""
+        """Shows all users and their expenses."""
         extra_context = extra_context or {}
         extra_context['title'] = 'Alle Ausgaben nach Benutzer'
         return super().changelist_view(request, extra_context=extra_context)
@@ -23,7 +23,7 @@ class IncomeAdmin(admin.ModelAdmin):
     search_fields = ('source', 'user__username')
 
     def changelist_view(self, request, extra_context=None):
-        """Zeigt alle Benutzer und ihre Einkommen an."""
+        """Shows all users and their income."""
         extra_context = extra_context or {}
         extra_context['title'] = 'Alle Einkommen nach Benutzer'
         return super().changelist_view(request, extra_context=extra_context)
@@ -36,7 +36,7 @@ class OverviewAdmin(admin.ModelAdmin):
     search_fields = ('user__username',)
 
     def changelist_view(self, request, extra_context=None):
-        """Zeigt alle Benutzer und ihre Finanzübersicht an."""
+        """Displays all users and their financial overview"""
         extra_context = extra_context or {}
         extra_context['title'] = 'Alle Finanzübersichten nach Benutzer'
         return super().changelist_view(request, extra_context=extra_context)

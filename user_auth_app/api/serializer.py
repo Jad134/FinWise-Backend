@@ -14,25 +14,25 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'mobile_number', 'date_of_birth', 'password', 'confirm_password']
 
     def validate_email(self, value):
-        """ Überprüft, ob die E-Mail bereits existiert """
+        """ Checks if the email already exists """
         if User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Diese E-Mail-Adresse wird bereits verwendet.")
         return value
 
     def validate(self, data):
-        """ Überprüft, ob die Passwörter übereinstimmen """
+        """ Checks if the passwords match """
         if data['password'] != data['confirm_password']:
             raise serializers.ValidationError({"wrong_confirm_password": "Passwörter stimmen nicht überein."})
         return data
 
     def create(self, validated_data):
-        """ Erstellt den Benutzer, entfernt confirm_password und gibt ihn zurück """
+        """ Creates the user, removes confirm_password and returns it """
         validated_data.pop('confirm_password')
         user = User.objects.create_user(**validated_data)
         return user
     
     def validate_date_of_birth(self, value):
-        """ Konvertiert dd/mm/yyyy zu einem echten Datumsobjekt """
+        """ Converts dd/mm/yyyy to a real date object """
         try:
             return datetime.strptime(value, "%d/%m/%Y").date()
         except ValueError:
